@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ artist.first_name }} {{ artist.last_name }} ·  Artisan Circle
+{% endblock %}
+
+{% block content %}
+<h2>{{ artist.first_name }} {{ artist.last_name }}</h2>
+<p>{{ artist.bio }}</p>
+<p><strong>Location:</strong> {{ artist.location }}</p>
+<p><strong>Membership:</strong> {{ artist.get_membership_plan_display }}</p>
+{% endblock %}
