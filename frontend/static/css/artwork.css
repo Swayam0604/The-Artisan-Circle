@@ -1,0 +1,12 @@
+.artwork-main-image {
+  max-width: 720px;
+  margin: 40px auto;
+}
+
+.artwork-main-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border: 1px solid #e5e5e5;
+  background: #f6f6f6;
+}

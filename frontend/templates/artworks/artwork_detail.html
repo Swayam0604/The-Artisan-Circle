@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<h1>{{artwork.title}}</h1>
+
+<p class="text-gray-600 leading-relaxed max-w-2xl">
+
+  By
+  <a href="/artist/{{ artwork.artist.slug }}/">
+    {{ artwork.artist.user.first_name }} {{ artwork.artist.user.last_name }}
+  </a>
+</p>
+
+<div class="artwork-main-image">
+  {% if primary_image %}
+    <img src="{{ primary_image.images.url }}" alt="{{ artwork.title }}">
+  {% else %}
+    <img src="{% static 'images/placeholder-artwork.jpg' %}" alt="No artwork image">
+  {% endif %}
+</div>
+
+{% if other_images %}
+  <div class="artwork-gallery">
+    {% for image in other_images %}
+      <img src="{{ image.images.url }}" alt="">
+    {% endfor %}
+  </div>
+{% endif %}
+<div class="artwork-meta">
+  {% if artwork.medium %}
+    <p class="text-gray-600 leading-relaxed max-w-2xl">
+{{ artwork.medium }}</p>
+  {% endif %}
+
+  {% if artwork.height_cm and artwork.width_cm %}
+    <p class="text-gray-600 leading-relaxed max-w-2xl">
+
+      {{ artwork.height_cm }} × {{ artwork.width_cm }} cm
+    </p>
+  {% endif %}
+
+  {% if artwork.year_created %}
+    <p class="text-gray-600 leading-relaxed max-w-2xl">
+{{ artwork.year_created }}</p>
+  {% endif %}
+
+  {% if artwork.is_unique %}
+    <p class="text-gray-600 leading-relaxed max-w-2xl">
+Unique work</p>
+  {% else %}
+    {% if artwork.edition_number and artwork.edition_total %}
+      <p class="text-gray-600 leading-relaxed max-w-2xl">
+Edition {{ artwork.edition_number }} of {{ artwork.edition_total }}</p>
+    {% endif %}
+  {% endif %}
+</div>
+
+
+<p class="text-gray-600 leading-relaxed max-w-2xl">
+{{ artwork.description }}</p>
+
+{% if artwork.is_for_sale %}
+  <p class="text-gray-600 leading-relaxed max-w-2xl">
+<strong>Price:</strong> ₹{{ artwork.price }}</p>
+{% endif %}
+
+{% if artwork.allow_offers %}
+  <button>Make an Offer</button>
+{% endif %}
+
+{% endblock %}

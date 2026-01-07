@@ -1,13 +1,37 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/artwork.css' %}">
+    <!-- Tailwind CSS CDN (Day 4 foundation) -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<script>
+  tailwind.config = {
+    theme: {
+  extend: {
+    fontFamily: {
+      sans: ['"Source Sans 3"', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'],
+    },
+  },
+},
+  }
+</script>
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
     <title>{% block title %}Artisan Circle{% endblock %}</title>
 </head>
-<body>
+<body class="font-sans text-base text-gray-900 leading-relaxed">
     <header>
-        <h1>Artisan Circle</h1>
+        <h1 class="font-sans text-4xl md:text-5xl leading-tight">
+Artisan Circle</h1>
         <nav>
             <a href="/">Home</a>
             <a href="/">Artworks</a>
@@ -17,9 +41,10 @@
         </nav>
     </header>
 
-    <main>
-        {% block content %}{% endblock %}
-    </main>
+    <main class="mx-auto max-w-[1440px] px-10">
+  {% block content %}{% endblock %}
+</main>
+
 
     <footer>
         <p>© Artisan Circle</p>
