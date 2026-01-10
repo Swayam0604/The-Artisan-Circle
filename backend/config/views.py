@@ -1,10 +1,9 @@
+# config/views.py
 from django.shortcuts import render
 
 def home (request):
     return render(request, "home.html")
 
-def artworks_list(request):
-    return render(request, "artwork/artworks-list.html")
 
 def artists_list(request):
     return render(request, "artist/artists-list.html")

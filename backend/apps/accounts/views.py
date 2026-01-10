@@ -1,3 +1,4 @@
+# apps/accounts/views.py
 from django.shortcuts import render, get_object_or_404
 from .models import ArtistProfile
 from apps.artworks.models import Artwork
