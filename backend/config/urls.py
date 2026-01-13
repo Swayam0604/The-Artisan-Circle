@@ -1,6 +1,6 @@
 # config/urls/
 from django.contrib import admin
-from django.urls import path,include
+from django.urls import path, include
 from . import views
 from django.conf import settings
 from django.conf.urls.static import static
@@ -8,9 +8,9 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", views.home, name="home"),
-    # path("artworks/", views.artworks_list, name="artworks-list"),
-    path("artworks/", include("apps.artworks.urls")),
-    path("artists/", views.artists_list, name="artist-list"),
+    path("artworks/", views.artwork_list, name="artwork-list"),
+    path("artwork/", include("apps.artworks.urls")),
+    path("artists/", views.artists_list, name="artist-list"),  # LIST
     path("artist/", include("apps.accounts.urls")),
     path("editorial/", views.editorial, name="editorial"),
     path("events/", views.events, name="events"),

@@ -22,3 +22,5 @@ def artist_detail_view(request, slug):
             "artworks": artworks
         }
     )
+
+

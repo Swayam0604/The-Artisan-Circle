@@ -22,17 +22,3 @@ def artwork_detail(request, slug):
 
     return render(request, "artworks/artwork_detail.html", context)
 
-def artwork_list(request):
-    artworks = (
-        Artwork.objects
-        .filter(is_for_sale=True)
-        .select_related("artist")
-        .prefetch_related("images")
-        .order_by("-created_at")
-    )
-
-    return render(
-        request,
-        "artworks/artworks-list.html",
-        {"artworks": artworks}
-    )

@@ -1,7 +1,47 @@
+<!-- artists/artists-list.html -->
 {% extends "base.html" %}
+{% load static %}
 
+{% block title %} Artists · Artisan Circle {% endblock %}
+ 
 {% block content %}
-<h1 class="text-3xl mb-8">Artists</h1>
+<section class="max-w-[1440px] mx-auto px-10 py-20">
 
-<p class="text-gray-600">Artist directory coming soon.</p>
+  <h1 class="text-3xl font-light mb-16">
+    Artists
+  </h1>
+
+  <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-12 gap-y-20">
+
+    {% for artist in artists %}
+      <a href="{% url 'accounts:artist-detail' artist.slug %}" class="group">
+
+        <!-- Artist image -->
+        <div class="aspect-square bg-gray-200 mb-6 overflow-hidden">
+          {% if artist.profile_image %}
+            <img
+              src="{{ artist.profile_image.url }}"
+              alt="{{ artist.first_name }}"
+              class="w-full h-full object-cover group-hover:opacity-90 transition"
+            >
+          {% endif %}
+        </div>
+
+        <!-- Artist info -->
+        <p class="text-sm font-medium">
+          {{ artist.first_name }} {{ artist.last_name }}
+        </p>
+
+        {% if artist.location %}
+          <p class="text-sm text-gray-600 mt-1">
+            {{ artist.location }}
+          </p>
+        {% endif %}
+
+      </a>
+    {% endfor %}
+
+  </div>
+
+</section>
 {% endblock %}
