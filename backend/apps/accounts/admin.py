@@ -12,3 +12,4 @@ class UserAdmin(admin.ModelAdmin):
 class ArtistProfileAdmin(admin.ModelAdmin):
     list_display = ('user', "first_name", 'last_name','membership_plan')
     search_fields = ('user__email', 'first_name', 'last_name')
+    prepopulated_fields = {"slug": ("first_name", "last_name")}

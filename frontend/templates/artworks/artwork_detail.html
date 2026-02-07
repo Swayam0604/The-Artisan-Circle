@@ -1,72 +1,238 @@
 {% extends "base.html" %}
 {% load static %}
+
 {% block content %}
 
-<h1>{{artwork.title}}</h1>
+<!-- SECTION 1: HERO -->
+<section class="max-w-[1440px] mx-auto px-6 md:px-10 py-16">
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
 
-<p class="text-gray-600 leading-relaxed max-w-2xl">
+    <!-- LEFT: IMAGE (7/12) -->
+    <div class="col-span-12 lg:col-span-7">
+      <div class="flex justify-center">
+  <!-- IMAGE CAROUSEL WRAPPER -->
+<div class="relative w-[900px] h-[800px] bg-gray-100 flex items-center justify-center overflow-hidden">
 
-  By
-  <a href="/artist/{{ artwork.artist.slug }}/">
-    {{ artwork.artist.user.first_name }} {{ artwork.artist.user.last_name }}
+  {% for img in artwork.images.all %}
+    <img
+      src="{{ img.images.url }}"
+      alt="{{ artwork.title }}"
+      class="carousel-image absolute inset-0 max-w-full max-h-full object-contain transition-opacity duration-300 {% if not forloop.first %}opacity-0{% endif %}"
+      data-index="{{ forloop.counter0 }}"
+    >
+  {% endfor %}
+
+  {% if artwork.images.count > 1 %}
+    <!-- LEFT ARROW -->
+    <button
+      class="absolute left-4 top-1/2 -translate-y-1/2 text-3xl text-gray-700 hover:text-black"
+      onclick="prevSlide()"
+    >
+      ‹
+    </button>
+
+    <!-- RIGHT ARROW -->
+    <button
+      class="absolute right-4 top-1/2 -translate-y-1/2 text-3xl text-gray-700 hover:text-black"
+      onclick="nextSlide()"
+    >
+      ›
+    </button>
+
+    <!-- DASH INDICATORS -->
+    <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-3">
+      {% for img in artwork.images.all %}
+        <span
+          class="carousel-dot w-8 h-[2px] bg-gray-400 cursor-pointer"
+          data-index="{{ forloop.counter0 }}"
+          onclick="goToSlide({{ forloop.counter0 }})"
+        ></span>
+      {% endfor %}
+    </div>
+  {% endif %}
+</div>
+
+</div>
+<div class="flex gap-6 justify-center text-sm text-gray-600 mt-4">
+  <button class="flex items-center gap-1">♡ Save</button>
+  <button class="flex items-center gap-1">👁 View in room</button>
+  <button class="flex items-center gap-1">⤴ Share</button>
+</div>
+
+
+    </div>
+
+    <!-- RIGHT: INFO (5/12) -->
+    <div class="col-span-12 lg:col-span-5">
+
+      <div class="space-y-6">
+
+  <!-- Artist -->
+  <a
+    href="{% url 'accounts:artist-detail' artwork.artist.slug %}"
+    class="text-base text-gray-700 underline"
+  >
+    {{ artwork.artist.first_name }} {{ artwork.artist.last_name }}
   </a>
-</p>
 
-<div class="artwork-main-image">
-  {% if primary_image %}
-    <img src="{{ primary_image.images.url }}" alt="{{ artwork.title }}">
-  {% else %}
-    <img src="{% static 'images/placeholder-artwork.jpg' %}" alt="No artwork image">
-  {% endif %}
-</div>
+  <!-- Artwork title -->
+  <h1 class="text-4xl font-light tracking-tight">
+    {{ artwork.title }}
+  </h1>
 
-{% if other_images %}
-  <div class="artwork-gallery">
-    {% for image in other_images %}
-      <img src="{{ image.images.url }}" alt="">
-    {% endfor %}
-  </div>
-{% endif %}
-<div class="artwork-meta">
-  {% if artwork.medium %}
-    <p class="text-gray-600 leading-relaxed max-w-2xl">
-{{ artwork.medium }}</p>
-  {% endif %}
-
-  {% if artwork.height_cm and artwork.width_cm %}
-    <p class="text-gray-600 leading-relaxed max-w-2xl">
-
-      {{ artwork.height_cm }} × {{ artwork.width_cm }} cm
-    </p>
-  {% endif %}
-
-  {% if artwork.year_created %}
-    <p class="text-gray-600 leading-relaxed max-w-2xl">
-{{ artwork.year_created }}</p>
-  {% endif %}
-
-  {% if artwork.is_unique %}
-    <p class="text-gray-600 leading-relaxed max-w-2xl">
-Unique work</p>
-  {% else %}
-    {% if artwork.edition_number and artwork.edition_total %}
-      <p class="text-gray-600 leading-relaxed max-w-2xl">
-Edition {{ artwork.edition_number }} of {{ artwork.edition_total }}</p>
+  <!-- Meta -->
+  <div class="space-y-1 text-sm text-gray-500">
+    {% if artwork.year %}
+      <p>{{ artwork.year }}</p>
     {% endif %}
-  {% endif %}
+    {% if artwork.medium %}
+      <p>{{ artwork.medium }}</p>
+    {% endif %}
+    {% if artwork.height_cm and artwork.width_cm %}
+      <p>{{ artwork.height_cm }} × {{ artwork.width_cm }} cm</p>
+    {% endif %}
+  </div>
+
+  <!-- Price -->
+  <div class="pt-4">
+    {% if artwork.is_for_sale and artwork.price %}
+      <p class="text-xl text-gray-900">₹{{ artwork.price }}</p>
+    {% else %}
+      <p class="text-sm text-gray-500">Not for sale</p>
+    {% endif %}
+  </div>
+
+  <!-- CTAs -->
+  <div class="space-y-3">
+    <button class="w-full bg-black text-white py-3 rounded-full">
+      Purchase
+    </button>
+    <button class="w-full border border-black py-3 rounded-full">
+      Make an Offer
+    </button>
+  </div>
+
+  <!-- Expandables (static for now) -->
+  <div class="border-t pt-4 space-y-4 text-sm">
+    <details>
+      <summary class="cursor-pointer">Shipping and taxes</summary>
+      <p class="mt-2 text-gray-600">Estimated at checkout</p>
+    </details>
+
+    <details>
+      <summary class="cursor-pointer">Get notifications for similar works</summary>
+    </details>
+  </div>
+
 </div>
 
 
-<p class="text-gray-600 leading-relaxed max-w-2xl">
-{{ artwork.description }}</p>
+    </div>
+  </div>
+</section>
 
-{% if artwork.is_for_sale %}
-  <p class="text-gray-600 leading-relaxed max-w-2xl">
-<strong>Price:</strong> ₹{{ artwork.price }}</p>
+<!-- SECTION 2: ABOUT THE WORK -->
+<section class="border-t">
+  <div class="max-w-[1440px] mx-auto px-6 md:px-10 py-16">
+
+    <h2 class="text-lg mb-6">About the work</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+      {% if artwork.medium %}
+        <div><strong>Medium</strong><br>{{ artwork.medium }}</div>
+      {% endif %}
+      {% if artwork.height_cm and artwork.width_cm %}
+        <div><strong>Size</strong><br>{{ artwork.height_cm }} × {{ artwork.width_cm }} cm</div>
+      {% endif %}
+      <div><strong>Condition</strong><br>New</div>
+      <div><strong>Certificate</strong><br>Included</div>
+    </div>
+
+    {% if artwork.description %}
+      <p class="mt-8 max-w-3xl text-gray-600 leading-relaxed">
+        {{ artwork.description }}
+      </p>
+    {% endif %}
+
+  </div>
+</section>
+
+<!-- SECTION 3: ABOUT THE ARTIST -->
+<section class="border-t bg-gray-50">
+  <div class="max-w-[1440px] mx-auto px-6 md:px-10 py-16 flex items-center justify-between">
+
+    <div>
+      <h3 class="text-lg">
+        {{ artwork.artist.first_name }} {{ artwork.artist.last_name }}
+      </h3>
+      <p class="text-sm text-gray-600 mt-1">
+        {{ artwork.artist.location }}
+      </p>
+    </div>
+
+    <a href="{% url 'accounts:artist-detail' artwork.artist.slug %}" class="border px-6 py-2 text-sm">
+      Follow
+    </a>
+
+  </div>
+</section>
+
+<!-- SECTION 4: OTHER WORKS -->
+{% if other_artworks %}
+<section class="border-t">
+  <div class="max-w-[1440px] mx-auto px-6 md:px-10 py-16">
+
+    <h2 class="text-lg mb-10">Other works by this artist</h2>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+      {% for work in other_artworks %}
+        <a href="{% url 'artworks:artwork-detail' work.slug %}">
+          <div class="aspect-square bg-gray-200 mb-3"></div>
+          <p class="text-sm">{{ work.title }}</p>
+        </a>
+      {% endfor %}
+    </div>
+
+  </div>
+</section>
 {% endif %}
 
-{% if artwork.allow_offers %}
-  <button>Make an Offer</button>
-{% endif %}
+{% endblock %}
+
+{% block js %}<script>
+  let currentSlide = 0;
+  const images = document.querySelectorAll(".carousel-image");
+  const dots = document.querySelectorAll(".carousel-dot");
+
+  function showSlide(index) {
+    images.forEach((img, i) => {
+      img.classList.toggle("opacity-0", i !== index);
+    });
+
+    dots.forEach((dot, i) => {
+      dot.classList.toggle("bg-black", i === index);
+      dot.classList.toggle("bg-gray-400", i !== index);
+    });
+
+    currentSlide = index;
+  }
+
+  function nextSlide() {
+    showSlide((currentSlide + 1) % images.length);
+  }
+
+  function prevSlide() {
+    showSlide((currentSlide - 1 + images.length) % images.length);
+  }
+
+  function goToSlide(index) {
+    showSlide(index);
+  }
+
+  // init
+  if (images.length) {
+    showSlide(0);
+  }
+</script>
 
 {% endblock %}

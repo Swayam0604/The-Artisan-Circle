@@ -76,6 +76,12 @@ class ArtistProfile(models.Model):
         default="bronze"
     )
 
+    profile_image = models.ImageField(
+        upload_to="artists/",
+        blank=True,
+        null=True
+    )
+
     created_at = models.DateTimeField(auto_now_add=True)
     slug = models.SlugField(unique=True, blank=True)
 
